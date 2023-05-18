@@ -1,0 +1,32 @@
+$bg-primary: #ffffff;
+$color-primary: #111111;
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+body {
+  background-color: $bg-primary;
+  padding: 40px 0px;
+  font-family: "Roboto", sans-serif;
+  font-size: 1em;
+}
+
+.card-item {
+  padding: 15px;
+  margin: 5px;
+  text-align: center;
+  font-size: 2em;
+  &.noborder {
+    text-align: left;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
+
+.spaceCap {
+  margin-bottom: 40px !important;
+}
+.text-center {
+  text-align: center;
+}
+.p-2 {
+  padding: 1em;
+}
