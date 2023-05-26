@@ -2,13 +2,15 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 
 import { createWrapper } from "next-redux-wrapper";
 import { userSlice } from "./userSlice";
-import { playerSlice } from "./playerSlice";
+import { playingSlice } from "./playingSlice";
+import { scoreSlice } from "./scoreSlice";
 
 const makeStore = () =>
   configureStore({
     reducer: {
       [userSlice.name]: userSlice.reducer,
-      [playerSlice.name]: playerSlice.reducer,
+      [playingSlice.name]: playingSlice.reducer,
+      [scoreSlice.name]: scoreSlice.reducer,
     },
     devTools: true,
   });

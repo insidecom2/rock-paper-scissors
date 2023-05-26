@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import YourScore from "./yourScore";
+import YourScore from "./playerScore";
 import HighScore from "./highScore";
 
 const Scores = () => {

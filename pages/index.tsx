@@ -10,7 +10,6 @@ import { useCreateUser } from "@/hooks/useCreateUser";
 
 export default function Home() {
   const userState = useSelector(selectUserState);
-
   useCreateUser();
 
   if (userState.id === "") return <Register />;

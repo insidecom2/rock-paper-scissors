@@ -3,7 +3,7 @@ import { Typography } from "@material-ui/core";
 interface YourScoreProp {
   score: number;
 }
-const YourScore = ({ score }: YourScoreProp) => {
+const PlayerScore = ({ score }: YourScoreProp) => {
   return (
     <Typography variant="h5" className="p-2">
       Your score {score} turn
@@ -11,4 +11,4 @@ const YourScore = ({ score }: YourScoreProp) => {
   );
 };
 
-export default YourScore;
+export default PlayerScore;

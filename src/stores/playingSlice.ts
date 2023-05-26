@@ -1,23 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from "./store";
+import { PLAY_ACTION, STATUS_PLAYING } from "@/consts/commons";
 
 interface playerSliceProp {
   playerChoice: string;
   isLoading: boolean;
   botChoice: string;
-  playerWin: boolean;
+  winner: string; // player / bot / no
   status: string; // idle / play / botplay
 }
 
 const initData: playerSliceProp = {
   playerChoice: "",
   isLoading: false,
-  botChoice: "",
-  playerWin: false,
-  status: "idle", // idle / play / botplay
+  botChoice: PLAY_ACTION.EMPTY,
+  winner: "no",
+  status: STATUS_PLAYING.IDEL, // idle / play / botplay
 };
 
-export const playerSlice = createSlice({
+export const playingSlice = createSlice({
   name: "player",
   initialState: initData,
   reducers: {
@@ -25,22 +26,22 @@ export const playerSlice = createSlice({
       state = initData;
     },
     setPlayerChoosed: (state, action) => {
-      state.playerChoice = action.payload.playerChoice;
+      state.playerChoice = action.payload;
       state.isLoading = true;
-      state.status = "play";
+      state.status = STATUS_PLAYING.PLAY;
     },
     setBotChoosed: (state, action) => {
       state.botChoice = action.payload.botChoice;
-      state.playerWin = action.payload.playerWin;
+      state.winner = action.payload.winner;
       state.isLoading = true;
-      state.status = "botplay";
+      state.status = STATUS_PLAYING.BOTPLAY;
     },
   },
 });
 
 export const { setPlayerIdel, setPlayerChoosed, setBotChoosed } =
-  playerSlice.actions;
+  playingSlice.actions;
 
-export const selectPlayerState = (state: AppState) => state.player;
+export const selectPlayingState = (state: AppState) => state.player;
 
-export default playerSlice.reducer;
+export default playingSlice.reducer;
