@@ -3,21 +3,18 @@ import Player from "@/components/player";
 import { Header } from "@/components/commons/Header";
 import Bot from "@/components/bot";
 import Scores from "@/components/score";
-import { useCreateUser } from "@/hooks/useCreateUser";
-import { useEffect } from "react";
 import { selectUserState } from "@/stores/userSlice";
 import { useSelector } from "react-redux";
-import { Loading } from "@/components/commons/Loading";
+import Register from "@/components/register";
+import { useCreateUser } from "@/hooks/useCreateUser";
 
 export default function Home() {
-  const { createUser } = useCreateUser();
   const userState = useSelector(selectUserState);
 
-  useEffect(() => {
-    if (userState.id === "") createUser();
-  }, []);
+  useCreateUser();
 
-  if (userState.id === "") return <Loading />;
+  if (userState.id === "") return <Register />;
+
   return (
     <>
       <Header title="Rock Paper Scissors" metaContent="Rock Paper Scissors" />
