@@ -18,16 +18,16 @@ export const scoreSlice = createSlice({
     setScoreStart: (state) => {
       state = initData;
     },
-    setyourScore: (state, action) => {
-      state.yourScore = action.payload.yourScore;
+    setYourScore: (state, action) => {
+      state.yourScore = action.payload;
     },
     setHighScore: (state, action) => {
-      state.highSocre = action.payload.highSocre;
+      state.highSocre = action.payload;
     },
   },
 });
 
-export const { setScoreStart, setyourScore, setHighScore } = scoreSlice.actions;
+export const { setScoreStart, setYourScore, setHighScore } = scoreSlice.actions;
 
 export const selectYourScoreState = (state: AppState) => state.score.yourScore;
 export const selectHighScoreState = (state: AppState) => state.score.highSocre;

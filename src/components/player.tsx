@@ -1,6 +1,6 @@
-import { Grid } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 import { CardBox } from "./commons/CardBox";
-import { PLAY_ACTION } from "../consts/commons";
+import { PLAY_ACTION, STATUS_PLAYING } from "../consts/commons";
 import { usePlaying } from "@/hooks/usePlaying";
 import { PlayerCardBox } from "./PlayerCardBox";
 import { useSelector } from "react-redux";
@@ -8,17 +8,27 @@ import { selectPlayingState } from "@/stores/playingSlice";
 
 const Player = () => {
   const { setPlayerActionHandle } = usePlaying();
-  const { playerChoice } = useSelector(selectPlayingState);
+  const { playerChoice, winner, status } = useSelector(selectPlayingState);
 
   const isRockSelected = playerChoice === PLAY_ACTION.ROCK ? "selected" : "";
   const isPaperSelected = playerChoice === PLAY_ACTION.PAPER ? "selected" : "";
   const isScissorsSelected =
     playerChoice === PLAY_ACTION.SCISSORS ? "selected" : "";
 
+  const isWin =
+    status === STATUS_PLAYING.BOTPLAY && winner === "player" ? true : false;
   return (
     <Grid container spacing={2}>
       <Grid item xs={3}>
-        <CardBox classExtra="card-item noborder">Player</CardBox>
+        <CardBox classExtra="card-item noborder">
+          Player
+          {isWin && (
+            <Box component="span" className="winner">
+              {"  "}
+              Win
+            </Box>
+          )}
+        </CardBox>
       </Grid>
       <Grid item xs={3}>
         <PlayerCardBox

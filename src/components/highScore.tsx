@@ -1,12 +1,12 @@
+import { selectHighScoreState } from "@/stores/scoreSlice";
 import { Typography } from "@material-ui/core";
+import { useSelector } from "react-redux";
 
-interface HighScoreProp {
-  score: number;
-}
-const HighScore = ({ score }: HighScoreProp) => {
+const HighScore = () => {
+  const highScore = useSelector(selectHighScoreState);
   return (
     <Typography variant="h5" className="p-2">
-      High score {score} turn
+      High score {highScore} turn
     </Typography>
   );
 };

@@ -6,8 +6,8 @@ const Scores = () => {
   return (
     <Grid container spacing={2} className="spaceCap">
       <Grid item xs={12} className="text-center">
-        <YourScore score={0} />
-        <HighScore score={0} />
+        <YourScore />
+        <HighScore />
       </Grid>
     </Grid>
   );

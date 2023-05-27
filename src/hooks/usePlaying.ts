@@ -1,27 +1,27 @@
-import { PLAY_ACTION } from "@/consts/commons";
-import { selectPlayingState, setBotChoosed } from "@/stores/playingSlice";
+import { PLAY_ACTION, TIME } from "@/consts/commons";
+import {
+  selectPlayingState,
+  setBotChoosed,
+  setPlayerIdel,
+} from "@/stores/playingSlice";
 import { setPlayerChoosed } from "@/stores/playingSlice";
-import { useEffect, useState } from "react";
+import { setHighScore, setYourScore } from "@/stores/scoreSlice";
+import { useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
 export const usePlaying = () => {
   const dispatch = useDispatch();
   const { isLoading } = useSelector(selectPlayingState);
-  const [loading, setLoading] = useState<boolean>(isLoading);
 
-  useEffect(() => {
-    setLoading(isLoading);
-  }, [isLoading]);
   const setPlayerActionHandle = async (action: string) => {
-    if (loading) return;
+    if (isLoading) return;
     await dispatch(setPlayerChoosed(action));
     /// call api get bot result
     await ApiResult(action);
   };
 
-  const ApiResult = (playerAction: string) => {
-    // if (isLoading) return;
+  const ApiResult = useCallback(async (playerAction: string) => {
     // mock random //
     const mockData = [
       PLAY_ACTION.ROCK,
@@ -31,56 +31,69 @@ export const usePlaying = () => {
     const rndInt = Math.floor(Math.random() * 3) + 1;
     const bot = mockData[rndInt - 1];
     const winner = mockLogic({ player: playerAction, bot });
-    console.log(playerAction, bot, winner);
-    console.log(loading, "2");
-    setBotActionHandle({ action: playerAction, winner });
-  };
+
+    setTimeout(() => {
+      setBotActionHandle({ action: bot, winner });
+      setPlayerScore(10);
+      setPlayerHighScore(20);
+      setTimeout(() => {
+        setIdleHandle();
+      }, TIME.SLEEP);
+    }, TIME.SLEEP);
+  }, []);
 
   const mockLogic = ({ player, bot }: { player: string; bot: string }) => {
-    if (player === PLAY_ACTION.ROCK) {
+    let winner = "";
+    if (player === bot) {
+      winner = "no";
+    } else if (player === PLAY_ACTION.ROCK) {
       if (bot === PLAY_ACTION.PAPER) {
-        return "bot";
+        winner = "bot";
       } else {
-        return "player";
+        winner = "player";
       }
     } else if (player === PLAY_ACTION.SCISSORS) {
       if (bot === PLAY_ACTION.ROCK) {
-        return "bot";
+        winner = "bot";
       } else {
-        return "player";
+        winner = "player";
       }
     } else if (player === PLAY_ACTION.PAPER) {
       if (bot === PLAY_ACTION.SCISSORS) {
-        return "bot";
+        winner = "bot";
       } else {
-        return "player";
+        winner = "player";
       }
     }
-    return "no";
+    return winner;
   };
-  const setHighScore = (score: number) => {};
+  const setPlayerHighScore = useCallback((score: number) => {
+    dispatch(setHighScore(score));
+  }, []);
 
-  const setPlayerScore = (score: number) => {};
+  const setPlayerScore = useCallback((score: number) => {
+    dispatch(setYourScore(score));
+  }, []);
 
-  const setBotActionHandle = ({
-    action,
-    winner,
-  }: {
-    action: string;
-    winner: string;
-  }) => {
-    console.log(loading, "12345");
-    if (!loading) return;
-    dispatch(
-      setBotChoosed({
-        botChoice: action,
-        playerWin: winner,
-      })
-    );
+  const setIdleHandle = async () => {
+    dispatch(setPlayerIdel());
   };
+
+  const setBotActionHandle = useCallback(
+    async ({ action, winner }: { action: string; winner: string }) => {
+      dispatch(
+        setBotChoosed({
+          botChoice: action,
+          winner: winner,
+        })
+      );
+    },
+    []
+  );
 
   return {
     setPlayerActionHandle,
     setBotActionHandle,
+    setHighScore,
   };
 };

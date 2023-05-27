@@ -23,7 +23,11 @@ export const playingSlice = createSlice({
   initialState: initData,
   reducers: {
     setPlayerIdel: (state) => {
-      state = initData;
+      state.playerChoice = "";
+      state.isLoading = false;
+      state.botChoice = PLAY_ACTION.EMPTY;
+      state.winner = "no";
+      state.status = STATUS_PLAYING.IDEL; // idle / play / botplay
     },
     setPlayerChoosed: (state, action) => {
       state.playerChoice = action.payload;

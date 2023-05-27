@@ -10,3 +10,7 @@ export const STATUS_PLAYING = {
   PLAY: "play",
   BOTPLAY: "botplay",
 } as const;
+
+export const TIME = {
+  SLEEP: 2000,
+};
