@@ -6,6 +6,7 @@ import {
 } from "@/stores/playingSlice";
 import { setPlayerChoosed } from "@/stores/playingSlice";
 import { setHighScore, setYourScore } from "@/stores/scoreSlice";
+import httpRequest from "@/utils/http";
 import { useCallback } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -22,51 +23,25 @@ export const usePlaying = () => {
   };
 
   const ApiResult = useCallback(async (playerAction: string) => {
-    // mock random //
-    const mockData = [
-      PLAY_ACTION.ROCK,
-      PLAY_ACTION.PAPER,
-      PLAY_ACTION.SCISSORS,
-    ];
-    const rndInt = Math.floor(Math.random() * 3) + 1;
-    const bot = mockData[rndInt - 1];
-    const winner = mockLogic({ player: playerAction, bot });
-
+    const dataResponse: any = await httpRequest({
+      method: "POST",
+      url: `${process.env.NEXT_PUBLIC_API_HOST}/playing`,
+      body: {
+        playerChoosed: playerAction,
+      },
+    });
+    const bot = dataResponse.data.bot;
+    const winner = dataResponse.data.winner;
     setTimeout(() => {
       setBotActionHandle({ action: bot, winner });
-      setPlayerScore(10);
-      setPlayerHighScore(20);
+      setPlayerScore(dataResponse.data.playerscore);
+      setPlayerHighScore(dataResponse.data.highscore);
       setTimeout(() => {
         setIdleHandle();
       }, TIME.SLEEP);
     }, TIME.SLEEP);
   }, []);
 
-  const mockLogic = ({ player, bot }: { player: string; bot: string }) => {
-    let winner = "";
-    if (player === bot) {
-      winner = "no";
-    } else if (player === PLAY_ACTION.ROCK) {
-      if (bot === PLAY_ACTION.PAPER) {
-        winner = "bot";
-      } else {
-        winner = "player";
-      }
-    } else if (player === PLAY_ACTION.SCISSORS) {
-      if (bot === PLAY_ACTION.ROCK) {
-        winner = "bot";
-      } else {
-        winner = "player";
-      }
-    } else if (player === PLAY_ACTION.PAPER) {
-      if (bot === PLAY_ACTION.SCISSORS) {
-        winner = "bot";
-      } else {
-        winner = "player";
-      }
-    }
-    return winner;
-  };
   const setPlayerHighScore = useCallback((score: number) => {
     dispatch(setHighScore(score));
   }, []);

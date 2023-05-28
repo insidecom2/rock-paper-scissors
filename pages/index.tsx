@@ -6,11 +6,11 @@ import Scores from "@/components/score";
 import { selectUserState } from "@/stores/userSlice";
 import { useSelector } from "react-redux";
 import Register from "@/components/register";
-import { useCreateUser } from "@/hooks/useCreateUser";
+import { useUser } from "@/hooks/useUser";
 
 export default function Home() {
   const userState = useSelector(selectUserState);
-  useCreateUser();
+  useUser();
 
   if (userState.id === "") return <Register />;
 

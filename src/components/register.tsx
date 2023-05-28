@@ -1,10 +1,10 @@
 import { Grid, Typography } from "@material-ui/core";
 import Button from "@mui/material/Button";
 import { CardBox } from "./commons/CardBox";
-import { useCreateUser } from "@/hooks/useCreateUser";
+import { useUser } from "@/hooks/useUser";
 
 const Register = () => {
-  const { createUser } = useCreateUser();
+  const { createUser } = useUser();
 
   return (
     <Grid container spacing={2} justifyContent="center">

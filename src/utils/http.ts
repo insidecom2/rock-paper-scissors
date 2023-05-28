@@ -12,7 +12,7 @@ export interface requestType {
 async function httpRequest(request: requestType) {
   const tokenStr: string = Cookies.get("user") ?? "";
   const headers: object = {
-    Authorization: `${tokenStr}`,
+    "x-user-id": `${tokenStr}`,
     "Content-Type": request.content_type ?? "application/json",
   };
 
@@ -95,16 +95,15 @@ async function httpRequest(request: requestType) {
 
 const checkStatus = (status: number) => {
   switch (status) {
-    case httpStatus.UN_AUTH:
-      window.location.href = "/";
-      console.log("Un-AUTH");
+    case httpStatus.FORBIDDEN:
+      window.location.reload();
       break;
   }
 };
 
 const isHasToken = (res: any) => {
-  if (res?.token) {
-    Cookies.set("token_doremi", res.token);
+  if (res?.userId) {
+    Cookies.set("user", res?.userId);
   }
 };
 export default httpRequest;

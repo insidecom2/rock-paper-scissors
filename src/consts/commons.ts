@@ -13,4 +13,5 @@ export const STATUS_PLAYING = {
 
 export const TIME = {
   SLEEP: 2000,
+  HIGHSCORE: 3000,
 };
