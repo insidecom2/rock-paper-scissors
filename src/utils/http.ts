@@ -96,6 +96,7 @@ async function httpRequest(request: requestType) {
 const checkStatus = (status: number) => {
   switch (status) {
     case httpStatus.FORBIDDEN:
+      Cookies.remove("user");
       window.location.reload();
       break;
   }

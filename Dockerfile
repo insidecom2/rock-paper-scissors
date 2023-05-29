@@ -1,36 +1,25 @@
-FROM node:18-alpine AS deps
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
+# Build environment
+FROM node:alpine as build
 
-COPY package.json package-lock.json ./
-RUN  npm install --production
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+# Install app dependencies
+COPY package.json ./
 
-ENV NEXT_TELEMETRY_DISABLED 1
+RUN npm install --legacy-peer-deps
+# Bundle app source
+COPY . ./
+RUN npm run export
 
-RUN npm run build
+# Production environment
+FROM nginx:alpine
+COPY --from=build /usr/src/app/out /usr/share/nginx/html
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/conf.d
 
-FROM node:18-alpine AS runner
-WORKDIR /app
+EXPOSE 80
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+CMD ["nginx", "-g", "daemon off;"]
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-
-USER nextjs
-
-EXPOSE 3000
-
-ENV PORT 3000
-
-CMD ["npm", "start"]
